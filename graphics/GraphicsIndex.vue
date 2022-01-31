@@ -1,10 +1,9 @@
 <template>
-    <Example />
+    <MainSketch />
 </template>
 
 <script setup>
-import Example from './Example/Example.vue';
+import MainSketch from './Main/MainSketch.vue';
 
-// full reload on hmr detection (p5 needs reinitialization)
-import.meta.hot?.on('vite:beforeUpdate', () => import.meta.hot.invalidate());
+import.meta.hot?.on('vite:beforeUpdate', () => import.meta.hot?.invalidate());
 </script>

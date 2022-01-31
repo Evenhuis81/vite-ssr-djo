@@ -1,6 +1,7 @@
 import main from '..';
 import {mouseProps} from '../locals';
 import constants from '../constants';
+import {keyPressed} from './draw';
 
 /** @type {string} */
 let id;
@@ -18,7 +19,7 @@ let height;
 const init = canvasId => {
     id = canvasId;
     mouse = mouseProps();
-    main.init(id, mouse);
+    main.init(id, mouse, keyPressed);
 };
 
 /** @param {function} script */
@@ -46,6 +47,16 @@ const background = (...args) => main.background(id, args);
 /** @param {Array<number>} args */
 const fill = (...args) => main.fill(id, args);
 
+const noFill = () => main.noFill(id);
+
+/** @param {Array<number>} args */
+const stroke = (...args) => main.stroke(id, args);
+
+const noStroke = () => main.noStroke(id);
+
+/** @param {number} size */
+const strokeWeight = size => main.strokeWeight(id, size);
+
 /** @param {Array<number>} args */
 const ellipse = (...args) => main.ellipse(id, args);
 
@@ -55,6 +66,9 @@ const ellipse = (...args) => main.ellipse(id, args);
  * @param {number} y
  */
 const text = (message, x, y) => main.text(id, message, x, y);
+
+/** @param {number} num */
+const textSize = num => main.textSize(id, num);
 
 /**
  * @param {number} x
@@ -95,16 +109,13 @@ const fps = () => {
 const line = (x1, y1, x2, y2) => main.line(id, x1, y1, x2, y2);
 
 /** @param {Array<number>} args */
-const stroke = (...args) => main.stroke(id, args);
-
-/** @param {Array<number>} args */
 const rect = (...args) => main.rect(id, args);
 
 /**
  * @param {string} src
  * @param {string} name
  */
-const loadImage = (src, name, dx = 0, dy = 0) => main.loadImage(id, src, name);
+const loadImage = (src, name) => main.loadImage(id, src, name);
 
 /**
  * @param {string} name
@@ -138,6 +149,10 @@ export {
     rect,
     loadImage,
     image,
+    noFill,
+    noStroke,
+    strokeWeight,
+    textSize,
 };
 // let movingSpeed = 50;
 

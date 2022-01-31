@@ -7,11 +7,18 @@ const context = {};
 /** @type {{[key: string]: HTMLImageElement}} */
 const images = {};
 
+/** @type {{[key: string]: {[key: string]: boolean}}} */
+const switches = {};
+
+/** @type {{[key: string]: {[key: string]: string|number}}} */
+const fonts = {};
+
 /**
  * @param {string} id
  * @param {{x: number, y: number}} mouse
+ * @param {function} keyPressed
  */
-const init = (id, mouse, renderer = '2d') => {
+const init = (id, mouse, keyPressed, renderer = '2d') => {
     canvas[id] = /** @type {HTMLCanvasElement} */ (document.getElementById(id));
     context[id] = /** @type {CanvasRenderingContext2D} */ (canvas[id].getContext(renderer));
     context[id].fillStyle = 'white';
@@ -20,6 +27,14 @@ const init = (id, mouse, renderer = '2d') => {
         mouse.x = event.clientX - canvas[id].getBoundingClientRect().left;
         mouse.y = event.clientY - canvas[id].getBoundingClientRect().top;
     });
+    // make global for all sketches and remove eventlistener if no sketch is active (ondestroy)
+    document.addEventListener('keydown', event => keyPressed(event));
+    switches[id] = {};
+    switches[id].noFill = false;
+    switches[id].noStroke = false;
+    fonts[id] = {};
+    fonts[id].font = 'sans-serif';
+    fonts[id].size = '16px';
 };
 
 /**
@@ -82,8 +97,10 @@ const clear = id => {
  * @param {Array<number>} args
  */
 const background = (id, args) => {
-    context[id].clearRect(0, 0, canvas[id].width, canvas[id].height);
+    // context[id].clearRect(0, 0, canvas[id].width, canvas[id].height);
+    clear(id);
     if (args.length === 1) canvas[id].style.backgroundColor = `rgb(${args[0]}, ${args[0]}, ${args[0]})`;
+    if (args.length === 2) canvas[id].style.backgroundColor = `rgba(${args[0]}, ${args[0]}, ${args[0]}, ${args[1]})`;
     if (args.length === 3) canvas[id].style.backgroundColor = `rgb(${args[0]}, ${args[1]}, ${args[2]})`;
     if (args.length === 4) canvas[id].style.backgroundColor = `rgba(${args[0]}, ${args[1]}, ${args[2]}, ${args[3]})`;
 };
@@ -93,8 +110,24 @@ const background = (id, args) => {
  * @param {Array<number>} args
  */
 const fill = (id, args) => {
+    switches[id].noFill = false;
     context[id].fillStyle = `rgb(${args[0]}, ${args[1]}, ${args[2]})`;
 };
+
+/** @param {string} id */
+const noFill = id => (switches[id].noFill = true);
+
+/**
+ * @param {string} id
+ * @param {Array<number>} args
+ */
+const stroke = (id, args) => {
+    switches[id].noStroke = false;
+    context[id].strokeStyle = `rgb(${args[0]}, ${args[1]}, ${args[2]})`;
+};
+
+/** @param {string} id */
+const noStroke = id => (switches[id].noStroke = true);
 
 /**
  * @param {string} id
@@ -103,8 +136,8 @@ const fill = (id, args) => {
 const ellipse = (id, args) => {
     context[id].beginPath();
     context[id].ellipse(args[0], args[1], args[2] / 2, args[3] / 2, 0, 0, 2 * Math.PI);
-    context[id].stroke(); // make optional: set stroke or no stroke
-    context[id].fill(); // make optional: set fill or no fill
+    if (!switches[id].noStroke) context[id].stroke();
+    if (!switches[id].noFill) context[id].fill();
 };
 
 /**
@@ -114,7 +147,17 @@ const ellipse = (id, args) => {
  * @param {number} y
  */
 const text = (id, message, x, y) => {
-    context[id].fillText(message, x, y);
+    if (!switches[id].noFill) context[id].fillText(message, x, y);
+    if (!switches[id].noStroke) context[id].strokeText(message, x, y);
+};
+
+/**
+ * @param {string} id
+ * @param {number} size
+ */
+const textSize = (id, size) => {
+    fonts[id].size = `${size}px`;
+    context[id].font = `${size}px ${fonts[id].font}`;
 };
 
 /**
@@ -123,8 +166,8 @@ const text = (id, message, x, y) => {
  * @param {number} y
  */
 const point = (id, x, y) => {
-    context[id].fillStyle = 'black';
-    context[id].fillRect(x, y, 1, 1);
+    if (switches[id].noStroke) return;
+    context[id].strokeRect(x, y, 1, 1);
 };
 
 /**
@@ -135,6 +178,7 @@ const point = (id, x, y) => {
  * @param {number} y2
  */
 const line = (id, x1, y1, x2, y2) => {
+    if (switches[id].noStroke) return;
     context[id].beginPath();
     context[id].moveTo(x1, y1);
     context[id].lineTo(x2, y2);
@@ -145,17 +189,12 @@ const line = (id, x1, y1, x2, y2) => {
  * @param {string} id
  * @param {Array<number>} args
  */
-const stroke = (id, args) => {
-    context[id].strokeStyle = `rgb(${args[0]}, ${args[1]}, ${args[2]})`;
-};
-
-/**
- * @param {string} id
- * @param {Array<number>} args
- */
 const rect = (id, args) => {
-    context[id].fillRect(args[0], args[1], args[2], args[3]);
-    context[id].strokeRect(args[0], args[1], args[2], args[3]);
+    context[id].rect(args[0], args[1], args[2], args[3]);
+    // context[id].fillStyle = '';
+    // context[id].strokeRect(args[0], args[1], args[2], args[3]);
+    context[id].fill();
+    context[id].stroke();
 };
 
 /**
@@ -184,8 +223,8 @@ const loadImage = (id, src, name) => {
  */
 const image = (id, name, dx, dy) => {
     context[id].drawImage(images[name], dx, dy);
-    // images[name].addEventListener('load', () => {
-    // });
+    // images[name].addEventListener('load', () => {});
+    // img.complete
 };
 export default {
     init,
@@ -205,4 +244,7 @@ export default {
     strokeWeight,
     loadImage,
     image,
+    noFill,
+    noStroke,
+    textSize,
 };

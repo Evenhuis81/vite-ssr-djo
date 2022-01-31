@@ -1,14 +1,21 @@
 // @ts-nocheck
-import {background, ellipse, height, noFill, noStroke, point, random, rect, stroke, text, textSize, width} from '.';
+import {background, image, strokeWeight, ellipse, height, noFill, noStroke, point, random, rect, stroke, text, textSize, width} from '.';
+let y = 300;
+let x = 0.003;
+
 
 export default () => {
-    background(128);
-    noStroke();
-    text('Hello World', 50, 50);
+    background(2,3,87);
+   stroke(240,60,20)
+  
+    strokeWeight(2 );
+     
+    textSize(60)
+    text('Hello devon', x, y);
     // make text stroke with default off
+     
 };
 
 export const keyPressed = ({key, keyCode}) => {
-    console.log(key);
-    console.log(keyCode);
+    if (key == ' ') space = true
 };

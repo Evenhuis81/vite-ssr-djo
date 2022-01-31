@@ -1,6 +1,7 @@
 // @ts-nocheck
-import {fullWindow} from '.';
+import {fullWindow, loadImage} from '.';
 
 export default () => {
     fullWindow();
+    loadImage('Mario_Mushroom_Transparant.png', 'marioboink')
 };

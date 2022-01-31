@@ -212,6 +212,7 @@ const strokeWeight = (id, value) => {
  */
 const loadImage = (id, src, name) => {
     images[name] = new Image();
+    images[name].addEventListener('load', () => {});
     images[name].src = '/graphics/Example/assets/' + src;
 };
 

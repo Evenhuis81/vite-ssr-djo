@@ -1,12 +1,7 @@
 <template>
-  <h1>Welcome</h1>
-  This page is:
-  <ul>
-    <li>Rendered to HTML.</li>
-    <li>Interactive. <Counter /></li>
-  </ul>
+    <GraphicsIndex />
 </template>
 
 <script setup>
-import Counter from './Counter.vue'
+import GraphicsIndex from '../../graphics/GraphicsIndex.vue';
 </script>

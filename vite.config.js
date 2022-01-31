@@ -1,6 +1,16 @@
-import vue from '@vitejs/plugin-vue'
-import ssr from 'vite-plugin-ssr/plugin'
+import vue from '@vitejs/plugin-vue';
+import ssr from 'vite-plugin-ssr/plugin';
+import {defineConfig} from 'vite';
+import path from 'path';
 
-export default {
-  plugins: [vue(), ssr()],
-}
+const root = path.resolve('./');
+
+export default defineConfig({
+    plugins: [vue(), ssr()],
+    resolve: {
+        alias: {
+            graphics: path.join(root, 'graphics'),
+            pages: path.join(root, 'pages'),
+        },
+    },
+});

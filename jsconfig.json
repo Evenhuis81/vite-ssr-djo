@@ -1,0 +1,30 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "module": "esnext",
+        "target": "esnext",
+        "moduleResolution": "node",
+        "lib": ["esnext", "dom"],
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "declaration": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "esModuleInterop": true,
+        "checkJs": true,
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": ".",
+        "paths": {
+            "graphics/*": ["./graphics/*"],
+            "pages/*": ["./src/pages/*"]
+        }
+    },
+    // "typeAcquisition": {
+    //     "include": ["jest"]
+    // },
+    // addeing vite/client here to import the ImportMetaEnv interface
+    // "include": ["src/**/*", "types/**/*", "tests/cypress/**/*", "node_modules/vite/client.d.ts"]
+}

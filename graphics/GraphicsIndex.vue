@@ -1,9 +1,9 @@
 <template>
-    <MainSketch />
+    <NatureOfCode />
 </template>
 
 <script setup>
-import MainSketch from './Main/MainSketch.vue';
+import NatureOfCode from './NatureOfCode/NatureOfCode.vue';
 
-import.meta.hot?.on('vite:beforeUpdate', () => import.meta.hot?.invalidate());
+// import.meta.hot?.on('vite:beforeUpdate', () => import.meta.hot?.invalidate());
 </script>

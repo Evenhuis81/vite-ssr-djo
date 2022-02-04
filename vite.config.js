@@ -11,6 +11,7 @@ export default defineConfig({
         alias: {
             graphics: path.join(root, 'graphics'),
             pages: path.join(root, 'pages'),
+            types: path.join(root, 'types'),
         },
     },
 });

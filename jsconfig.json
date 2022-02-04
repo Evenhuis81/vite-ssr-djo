@@ -27,5 +27,5 @@
     // },
     // addeing vite/client here to import the ImportMetaEnv interface
     "include": ["pages/**/*", "graphics/**/*", "renderer/**/*", "server/**/*", "types/**/*", "node_modules/vite/client.d.ts"],
-    "exclude": ["graphics/Main/draw.js", "graphics/Main/setup.js"],
+    // "exclude": ["graphics/Main/draw.js", "graphics/Main/setup.js"],
 }

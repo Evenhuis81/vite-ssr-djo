@@ -1,70 +1,62 @@
-/** @typedef {import('types/motion').Motion} Motion */
+import {Motion} from 'graphics/motion';
 
-import {vec, vec2} from 'graphics/vectors';
-
-const width = 400;
-const height = 400;
-let mu = 0.1;
+const width = 500;
+const height = 500;
 
 /**
  * @param {CanvasRenderingContext2D} ctx
  * @param {number} x
  * @param {number} y
  * @param {number} m
- * @returns {Motion}
+ * @returns {import('types/motion').Mover}
  */
 export const Mover = (ctx, x, y, m) => {
-    const pos = vec2(x, y);
-    const vel = vec2();
-    const acc = vec2();
-    const mass = m;
-    const r = Math.sqrt(mass) * 10;
+    const {pos, vel, applyForce, update, friction, drag, attract} = Motion();
+    let {mass} = Motion();
+    pos.set(x, y);
+    vel.random2D().mult(5);
+    mass = m;
+    const r = Math.sqrt(mass) * 2;
+    let fillC = 'rgba(255, 255, 255, 0.4)';
 
-    const drag = () => {};
-
-    const friction = () => {
-        let diff = height - (pos.y + r);
-        if (diff < 1) {
-            let friction = vel.copy();
-            friction.normalize();
-            friction.mult(-1);
-            let normal = mass;
-            friction.setMag(mu * normal);
-            applyForce(friction);
-        }
-    };
-    /** @param {import('types/vectors').vec2} force */
-    const applyForce = force => {
-        let f = vec.div(force, mass);
-        acc.add(f);
-    };
-    const update = () => {
-        vel.add(acc);
-        pos.add(vel);
-        acc.set(0, 0);
-    };
     const show = () => {
         ctx.strokeStyle = 'white';
         ctx.lineWidth = 2;
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+        ctx.fillStyle = fillC;
         ctx.beginPath();
         ctx.arc(pos.x, pos.y, r, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
     };
+    /**
+     *
+     * @param {number} r
+     * @param {number} g
+     * @param {number} b
+     */
+    const setColor = (r, g, b) => {
+        fillC = `rgb(${r}, ${g}, ${b})`;
+    };
     const edges = () => {
         if (pos.y >= height - r) {
             pos.y = height - r;
             vel.y *= -1;
+            vel.y * 0.95;
+        } else if (pos.y < r) {
+            pos.y = r;
+            vel.y *= -1;
+            vel.y * 0.95;
         }
 
         if (pos.x >= width - r) {
             pos.x = width - r;
             vel.x *= -1;
+            vel.x * 0.95;
         } else if (pos.x <= r) {
             pos.x = r;
             vel.x *= -1;
+            vel.x * 0.95;
         }
     };
-    return Object.freeze({update, show, edges, applyForce, friction, mass, drag});
+    return Object.freeze({update, show, edges, applyForce, friction, mass, pos, r, drag, attract, setColor});
 };

@@ -1,20 +1,22 @@
-export const mouseProps = () => {
-    const properties = {
-        x: 0,
-        y: 0,
-    };
+export const mouseProps = (x_ = 0, y_ = 0, isPressed_ = false) => {
     const self = {
         get x() {
-            return properties.x;
+            return x_;
         },
         set x(x) {
-            properties.x = x;
+            x_ = x;
         },
         get y() {
-            return properties.y;
+            return y_;
         },
         set y(y) {
-            properties.y = y;
+            y_ = y;
+        },
+        get isPressed() {
+            return isPressed_;
+        },
+        set isPressed(bool) {
+            isPressed_ = bool;
         },
     };
     return self;
